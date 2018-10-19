@@ -51,6 +51,7 @@ public class CustomerList extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        loadButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -76,6 +77,13 @@ public class CustomerList extends javax.swing.JFrame {
         jLabel4.setText("Year of Birth");
 
         jLabel5.setText("Postal Code");
+
+        loadButton.setText("Load");
+        loadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -104,10 +112,12 @@ public class CustomerList extends javax.swing.JFrame {
                                 .addComponent(nameVar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel2)))
-                        .addGap(0, 11, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(loadButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(addCustomers)))
                 .addContainerGap())
         );
@@ -117,10 +127,11 @@ public class CustomerList extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(addCustomers))
+                    .addComponent(addCustomers)
+                    .addComponent(loadButton))
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(nameVar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -150,11 +161,51 @@ public class CustomerList extends javax.swing.JFrame {
             fileOut.println(nameVar.getText());
             fileOut.println(addressVar.getText());
             fileOut.println(yearVar.getText());
+            boolean numberFormatGood = false;
+            boolean letterFormatGood = false;
+            try{
+                Integer.parseInt(postalVar.getText().substring(0,1));
+                Integer.parseInt(postalVar.getText().substring(2,3));
+                Integer.parseInt(postalVar.getText().substring(5,6));
+                System.out.println("Please ensure that you have your postal code in this format\nL#L #L# where L is a letter and # is a number");
+            }catch(NumberFormatException nfe){
+                letterFormatGood = true;
+            }
+            try{
+                Integer.parseInt(postalVar.getText().substring(1,2));
+                Integer.parseInt(postalVar.getText().substring(4,5));
+                Integer.parseInt(postalVar.getText().substring(6,7));
+                numberFormatGood = true;
+            }catch(NumberFormatException nfe){
+                System.out.println("Please ensure that you have your postal code in this format\nL#L #L# where L is a letter and # is a number");
+            }
+            if(letterFormatGood&&numberFormatGood){
+                fileOut.println(postalVar.getText());
+                numberFormatGood = false;
+                letterFormatGood = false;
+            }
             fileOut.close();
         }catch(IOException IOEx){
             
         }
     }//GEN-LAST:event_addCustomersActionPerformed
+
+    private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
+        // TODO add your handling code here:
+        try{
+            BufferedReader readFile = new BufferedReader(new FileReader("customerList.txt"));
+            String line, output;
+            output = "";
+            while((line = readFile.readLine()) != null){
+                output+=line+"\n";
+            }
+            displayArea.setText(output);
+        }catch(FileNotFoundException fnfe){
+            
+        }catch(IOException IOEx){
+            
+        }
+    }//GEN-LAST:event_loadButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -201,6 +252,7 @@ public class CustomerList extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton loadButton;
     private javax.swing.JTextField nameVar;
     private javax.swing.JTextField postalVar;
     private javax.swing.JTextField yearVar;
