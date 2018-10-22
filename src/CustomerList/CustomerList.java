@@ -170,26 +170,38 @@ public class CustomerList extends javax.swing.JFrame {
             PrintWriter fileOut = new PrintWriter(new FileWriter("customerList.txt", true));
             boolean numberFormatGood = false;
             boolean letterFormatGood = false;
+            boolean dateFormatGood = false;
+            //Checking the year of birth format
+            try{
+                int year = Integer.parseInt(yearVar.getText());
+                dateFormatGood = true;
+            }catch(NumberFormatException nfe){}
             //Checking the letters
             letterFormatGood = Character.isAlphabetic(postalVar.getText().charAt(0));
             letterFormatGood = Character.isAlphabetic(postalVar.getText().charAt(2));
             letterFormatGood = Character.isAlphabetic(postalVar.getText().charAt(5));
-            //Checking the numbers
-            numberFormatGood = Character.isDigit(postalVar.getText().charAt(1));
-            numberFormatGood = Character.isDigit(postalVar.getText().charAt(4));
-            numberFormatGood = Character.isDigit(postalVar.getText().charAt(6));
+            //Checkign the numbers
+            try{
+                Integer.parseInt(postalVar.getText().substring(1,2));
+                Integer.parseInt(postalVar.getText().substring(4,5));
+                Integer.parseInt(postalVar.getText().substring(6,7));
+                numberFormatGood = true;
+            }catch(NumberFormatException nfe){
+                System.out.println("Please ensure that you have your postal code in this format\nL#L #L# where L is a letter and # is a number");
+                numberFormatGood = false;
+            }
             //If both formats are good it will output
-            if(letterFormatGood&&numberFormatGood){
+            if(letterFormatGood&&numberFormatGood&&dateFormatGood){
                 fileOut.println("Name : "+nameVar.getText());
                 fileOut.println("Address : "+addressVar.getText());
                 fileOut.println("Year of Birth : "+yearVar.getText());
-                fileOut.println("Postal Code : "+postalVar.getText());
+                fileOut.println("Postal Code : "+postalVar.getText()+"\n");
                 numberFormatGood = false;
                 letterFormatGood = false;
             //If the formats are not good it will give a warning
-            }else{System.out.println("Please ensure that you have your postal code in this format\nL#L #L# where L is a letter and # is a number"+
-                    "\nPlease use the correct format and resubmit"
-                    + "\n-------------------------------------------------");}
+            }else{System.out.println("Please ensure that you have your postal code in this format\nL#L #L# where L is a letter and # is a number"
+                    + "\nPut the year into YYYY format"
+                    + "\n|-----------------------------------------------------|");}
             fileOut.close();
             BufferedReader readFile = new BufferedReader(new FileReader("customerList.txt"));
             String line, output;
