@@ -1,16 +1,9 @@
-F
-1
-1
-F12 121
-F
-1
-1
-F12 121
-a
-a
-2
-F1F 1F1
-a
-a
-2
-F11 1F1
+
+Name : a
+Address : s
+Year of Birth : d
+Postal Code : E2E 5E5
+Name : a
+Address : s
+Year of Birth : d
+Postal Code : 32E 5E5

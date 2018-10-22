@@ -52,12 +52,13 @@ public class CustomerList extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         loadButton = new javax.swing.JButton();
+        deleteList = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Discount Fly");
 
-        addCustomers.setText("Add Customers");
+        addCustomers.setText("Add Customer");
         addCustomers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addCustomersActionPerformed(evt);
@@ -82,6 +83,13 @@ public class CustomerList extends javax.swing.JFrame {
         loadButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadButtonActionPerformed(evt);
+            }
+        });
+
+        deleteList.setText("Delete Customer List");
+        deleteList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteListActionPerformed(evt);
             }
         });
 
@@ -111,7 +119,8 @@ public class CustomerList extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(nameVar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2)))
+                                .addComponent(jLabel2))
+                            .addComponent(deleteList))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -148,7 +157,8 @@ public class CustomerList extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(postalVar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(deleteList)))
                 .addContainerGap())
         );
 
@@ -158,36 +168,43 @@ public class CustomerList extends javax.swing.JFrame {
     private void addCustomersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCustomersActionPerformed
         try{
             PrintWriter fileOut = new PrintWriter(new FileWriter("customerList.txt", true));
-            fileOut.println(nameVar.getText());
-            fileOut.println(addressVar.getText());
-            fileOut.println(yearVar.getText());
             boolean numberFormatGood = false;
             boolean letterFormatGood = false;
-            try{
+            try{ //Checking the letters
                 Integer.parseInt(postalVar.getText().substring(0,1));
                 Integer.parseInt(postalVar.getText().substring(2,3));
-                Integer.parseInt(postalVar.getText().substring(5,6));
+//                Integer.parseInt(postalVar.getText().substring(5,6));
+                letterFormatGood = false;
                 System.out.println("Please ensure that you have your postal code in this format\nL#L #L# where L is a letter and # is a number");
             }catch(NumberFormatException nfe){
                 letterFormatGood = true;
             }
-            try{
+            try{ //Checking the numbers
                 Integer.parseInt(postalVar.getText().substring(1,2));
                 Integer.parseInt(postalVar.getText().substring(4,5));
                 Integer.parseInt(postalVar.getText().substring(6,7));
                 numberFormatGood = true;
             }catch(NumberFormatException nfe){
                 System.out.println("Please ensure that you have your postal code in this format\nL#L #L# where L is a letter and # is a number");
+                numberFormatGood = false;
             }
             if(letterFormatGood&&numberFormatGood){
-                fileOut.println(postalVar.getText());
+                fileOut.println("Name : "+nameVar.getText());
+                fileOut.println("Address : "+addressVar.getText());
+                fileOut.println("Year of Birth : "+yearVar.getText());
+                fileOut.println("Postal Code : "+postalVar.getText());
                 numberFormatGood = false;
                 letterFormatGood = false;
-            }
+            }else{System.out.println("Please use the correct format and resubmit");}
             fileOut.close();
-        }catch(IOException IOEx){
-            
-        }
+            BufferedReader readFile = new BufferedReader(new FileReader("customerList.txt"));
+            String line, output;
+            output = "";
+            while((line = readFile.readLine()) != null){
+                output+=line+"\n";
+            }
+            displayArea.setText(output);
+        }catch(IOException IOEx){}
     }//GEN-LAST:event_addCustomersActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
@@ -206,6 +223,22 @@ public class CustomerList extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_loadButtonActionPerformed
+
+    private void deleteListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteListActionPerformed
+        // Clears the customer list file
+        try{
+            PrintWriter fileOut = new PrintWriter(new FileWriter("customerList.txt"));
+            fileOut.println("");
+            fileOut.close();
+            BufferedReader readFile = new BufferedReader(new FileReader("customerList.txt"));
+            String line, output;
+            output = "";
+            while((line = readFile.readLine()) != null){
+                output+=line+"\n";
+            }
+            displayArea.setText(output);
+        }catch(IOException IOEx){}
+    }//GEN-LAST:event_deleteListActionPerformed
 
     /**
      * @param args the command line arguments
@@ -245,6 +278,7 @@ public class CustomerList extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addCustomers;
     private javax.swing.JTextField addressVar;
+    private javax.swing.JButton deleteList;
     private javax.swing.JTextArea displayArea;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
