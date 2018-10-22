@@ -180,7 +180,7 @@ public class CustomerList extends javax.swing.JFrame {
             letterFormatGood = Character.isAlphabetic(postalVar.getText().charAt(0));
             letterFormatGood = Character.isAlphabetic(postalVar.getText().charAt(2));
             letterFormatGood = Character.isAlphabetic(postalVar.getText().charAt(5));
-            //Checkign the numbers
+            //Checking the numbers
             try{
                 Integer.parseInt(postalVar.getText().substring(1,2));
                 Integer.parseInt(postalVar.getText().substring(4,5));
