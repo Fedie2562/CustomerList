@@ -1,9 +1,1 @@
 
-Name : a
-Address : s
-Year of Birth : d
-Postal Code : E2E 5E5
-Name : a
-Address : s
-Year of Birth : d
-Postal Code : 32E 5E5

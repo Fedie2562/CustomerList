@@ -166,28 +166,19 @@ public class CustomerList extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     private void addCustomersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCustomersActionPerformed
-        try{
+       try{
             PrintWriter fileOut = new PrintWriter(new FileWriter("customerList.txt", true));
             boolean numberFormatGood = false;
             boolean letterFormatGood = false;
-            try{ //Checking the letters
-                Integer.parseInt(postalVar.getText().substring(0,1));
-                Integer.parseInt(postalVar.getText().substring(2,3));
-//                Integer.parseInt(postalVar.getText().substring(5,6));
-                letterFormatGood = false;
-                System.out.println("Please ensure that you have your postal code in this format\nL#L #L# where L is a letter and # is a number");
-            }catch(NumberFormatException nfe){
-                letterFormatGood = true;
-            }
-            try{ //Checking the numbers
-                Integer.parseInt(postalVar.getText().substring(1,2));
-                Integer.parseInt(postalVar.getText().substring(4,5));
-                Integer.parseInt(postalVar.getText().substring(6,7));
-                numberFormatGood = true;
-            }catch(NumberFormatException nfe){
-                System.out.println("Please ensure that you have your postal code in this format\nL#L #L# where L is a letter and # is a number");
-                numberFormatGood = false;
-            }
+            //Checking the letters
+            letterFormatGood = Character.isAlphabetic(postalVar.getText().charAt(0));
+            letterFormatGood = Character.isAlphabetic(postalVar.getText().charAt(2));
+            letterFormatGood = Character.isAlphabetic(postalVar.getText().charAt(5));
+            //Checking the numbers
+            numberFormatGood = Character.isDigit(postalVar.getText().charAt(1));
+            numberFormatGood = Character.isDigit(postalVar.getText().charAt(4));
+            numberFormatGood = Character.isDigit(postalVar.getText().charAt(6));
+            //If both formats are good it will output
             if(letterFormatGood&&numberFormatGood){
                 fileOut.println("Name : "+nameVar.getText());
                 fileOut.println("Address : "+addressVar.getText());
@@ -195,7 +186,10 @@ public class CustomerList extends javax.swing.JFrame {
                 fileOut.println("Postal Code : "+postalVar.getText());
                 numberFormatGood = false;
                 letterFormatGood = false;
-            }else{System.out.println("Please use the correct format and resubmit");}
+            //If the formats are not good it will give a warning
+            }else{System.out.println("Please ensure that you have your postal code in this format\nL#L #L# where L is a letter and # is a number"+
+                    "\nPlease use the correct format and resubmit"
+                    + "\n-------------------------------------------------");}
             fileOut.close();
             BufferedReader readFile = new BufferedReader(new FileReader("customerList.txt"));
             String line, output;
@@ -208,7 +202,7 @@ public class CustomerList extends javax.swing.JFrame {
     }//GEN-LAST:event_addCustomersActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
-        // TODO add your handling code here:
+        // Load the file contents and print to the text box on screen
         try{
             BufferedReader readFile = new BufferedReader(new FileReader("customerList.txt"));
             String line, output;
